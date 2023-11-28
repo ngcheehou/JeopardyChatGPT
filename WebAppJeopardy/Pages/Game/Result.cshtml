@@ -1,0 +1,48 @@
+﻿@page
+@model WebAppJeopardy.Pages.Game.ResultModel
+@{
+}
+@{
+    var jeoparty = Model.Jeoparty;
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<h2>Result</h2>
+ 
+@if (jeoparty != null)
+{
+    if (jeoparty.UserAnswerIsCorrect)
+    {
+        <div id="question-box" style="color: green;">
+            Your answer @jeoparty.UserSelectedAnswer, @jeoparty.UserSelectedAnswerText is correct.
+        </div>
+    }
+    else
+    {
+        <div id="question-box" style="color: red;">
+            Sorry, your answer @jeoparty.UserSelectedAnswer, @jeoparty.UserSelectedAnswerText is wrong.
+        </div>
+        <div id="question-box" style="color: green;">
+            The correct answer is @jeoparty.Answer @jeoparty.AnswerText
+        </div>
+    }
+}
+else
+{
+    <p>No data available.</p>
+}
+
+
+
+
+
+
+
+<form method="post" asp-page-handler="Submit">
+    <div>
+        <button id="submit-button" type="submit" class="btn btn-primary text-uppercase">Next Question</button>
+    </div>
+</form>

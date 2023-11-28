@@ -1,0 +1,65 @@
+﻿@page
+@using Newtonsoft.Json;
+@model WebAppJeopardy.Pages.Game.QuestionModel
+@{
+}
+
+
+@{
+    ViewData["Title"] = "Jeopardy! Question";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<h2>Jeopardy! Question</h2>
+
+<div id="question-box">
+    <p>@Model.JeopartyQA.QuestionText</p>
+</div>
+
+<form method="post" asp-page-handler="Submit">
+    <div id="answers-section">
+        <div class="answer-row">
+            @foreach (var q in Model.JeopartyQA.QuestionsOptions.Take(2))
+            {
+                <button type="button" class="answer-button" data-value="@q.Key">@q.Key: @q.Value</button>
+            }
+        </div>
+
+        <div class="answer-row">
+            @foreach (var q in Model.JeopartyQA.QuestionsOptions.Skip(2))
+            {
+                <button type="button" class="answer-button" data-value="@q.Key">@q.Key: @q.Value</button>
+            }
+        </div>
+    </div>
+
+    <!-- Hidden input for the selected answer -->
+
+    <input type="hidden" name="JeopartyQAData" value="@JsonConvert.SerializeObject(Model.JeopartyQA)" />
+
+    <input type="hidden" id="selected-answer" name="UserSelectedAnswer" value='' />
+    <div>
+        <button id="submit-button" type="submit" class="btn btn-primary text-uppercase">Confirm</button>
+    </div>
+</form>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const answerButtons = document.querySelectorAll('.answer-button');
+        const hiddenInput = document.getElementById('selected-answer');
+
+        answerButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                answerButtons.forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+                hiddenInput.value = this.getAttribute('data-value');
+                console.log('Selected answer:', hiddenInput.value);
+            });
+        });
+    });
+</script>
